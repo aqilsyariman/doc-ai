@@ -1,5 +1,7 @@
 import PyPDF2
+from sentence_transformers import SentenceTransformer
 
+model = SentenceTransformer('all-MiniLM-L6-v2')
 # ALL functions at top
 def validate_files(files):
     valid_files = []
@@ -23,13 +25,16 @@ def split_text(text):
         chunks.append(chunk)
     return chunks
 
+def embed_chunks(chunks):
+    vectors = model.encode(chunks)
+    return vectors
 # ALL calls at bottom
 result = validate_files(["L1 IP (added subnet route).pdf"])
 
 if result:
     text = read_pdf(result[0])
     chunks = split_text(text)
-    print(f"Total chunks: {len(chunks)}")
-else:
-    print("Error: Not a PDF file")
+    vectors = embed_chunks(chunks)
+    print(f"Vector shape: {vectors.shape}")
+
     
