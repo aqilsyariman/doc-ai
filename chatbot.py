@@ -37,14 +37,21 @@ def store_vectors(chunks, vectors):
     ids = []
     for i in range (len(chunks)):
         ids.append(str(i))
-        
 
     collection.add(
         embeddings=vectors,
         documents=chunks,
         ids=ids
     )
+    return collection
 
+def search(question, collection):
+    question_vector = model.encode(question)
+    results = collection.query(
+        query_embeddings=[question_vector.tolist()],
+        n_results=3
+    )
+    return results
 
 # ALL calls at bottom
 result = validate_files(["L1 IP (added subnet route).pdf"])
@@ -53,7 +60,9 @@ if result:
     chunks = split_text(text)
     vectors = embed_chunks(chunks)
     print(f"Vector shape: {vectors.shape}")
-    store_vectors(chunks, vectors.tolist())
+    collection = store_vectors(chunks, vectors.tolist())
     print("Stored in ChromaDB!!")
+    results = search("What is ICMP?", collection)
+    print(results)
 
     
