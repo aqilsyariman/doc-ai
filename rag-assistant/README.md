@@ -108,4 +108,4 @@ rag-assistant/
 
 ## Built By
 
-Aqil Syariman — AI Engineer in progress 🔥
+Aqil Syariman
