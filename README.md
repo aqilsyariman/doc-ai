@@ -6,7 +6,7 @@ A RAG (Retrieval-Augmented Generation) system that allows you to ask questions a
 
 Upload any PDF file and ask questions about its content. The system reads the document, understands the meaning of each section, and returns precise answers based only on the information inside the PDF.
 
-If you ask something unrelated to the PDF, the system will tell you it cannot find relevant information — instead of making up an answer.
+If you ask something unrelated to the PDF, the system will tell you it cannot find relevant information instead of making up an answer.
 
 **Example:**
 ```
