@@ -1,5 +1,6 @@
 import os
 import PyPDF2
+import uuid
 import chromadb
 from sentence_transformers import SentenceTransformer
 from dotenv import load_dotenv
@@ -36,10 +37,21 @@ def embed_chunks(chunks):
 
 def store_vectors(chunks, vectors):
     client = chromadb.Client()
-    collection = client.get_or_create_collection("pdf_chunks") 
+    
+    # Optional but recommended: Delete the old collection first 
+    # so answers from an old PDF don't mix with a newly uploaded PDF!
+    try:
+        client.delete_collection("pdf_chunks")
+    except Exception:
+        pass
+        
+    collection = client.create_collection("pdf_chunks") 
+    
     ids = []
     for i in range(len(chunks)):
-        ids.append(str(i))
+        # Generate a guaranteed unique random ID for every chunk
+        ids.append(str(uuid.uuid4()))
+        
     collection.add(
         embeddings=vectors,
         documents=chunks,
@@ -53,12 +65,11 @@ def search(question, collection):
         query_embeddings=[question_vector.tolist()],
         n_results=3
     )
-    if results['distances'][0][0] > 1.5:
+    if not results['documents'] or not results['documents'][0]:
         return None
     return results
 
 def get_answer(question, results):
-    api_key = os.getenv("GROQ_API_KEY")
     llm = ChatGroq(model="llama-3.1-8b-instant")
     context = " ".join(results['documents'][0])
     prompt = f"Based on this information: {context} Answer this question: {question}"

@@ -17,8 +17,14 @@ if st.button("Ask"):
         split = split_text(text)
         embed = embed_chunks(split)
         collection = store_vectors(split,embed.tolist())
-        results = search(question,collection)
-        answer = get_answer(question,results)
-        st.write(answer)
         
+        # Search the database
+        results = search(question,collection)
+        
+        # Check if results is None BEFORE getting the answer
+        if results is None:
+            st.warning("Sorry, I could not find relevant information in this PDF.")
+        else:
+            answer = get_answer(question,results)
+            st.write(answer)
         

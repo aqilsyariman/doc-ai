@@ -4,7 +4,7 @@ A RAG (Retrieval-Augmented Generation) system that allows you to ask questions a
 
 ## What It Does
 
-Place any PDF file in the `data/` folder and ask questions about its content. The system reads the document, understands the meaning of each section, and returns precise answers based only on the information inside the PDF.
+Upload any PDF file and ask questions about its content. The system reads the document, understands the meaning of each section, and returns precise answers based only on the information inside the PDF.
 
 If you ask something unrelated to the PDF, the system will tell you it cannot find relevant information — instead of making up an answer.
 
@@ -43,6 +43,7 @@ PDF → Validate → Read all pages → Split into chunks → Convert to vectors
 - **ChromaDB** — Vector database storage and search
 - **LangChain** — AI model integration
 - **Groq API** — Free AI inference (LLaMA 3.1)
+- **Streamlit** — Web UI for PDF upload and chat interface
 
 ## Installation
 
@@ -59,7 +60,7 @@ cd rag-assistant
 
 ### Step 2 — Install dependencies
 ```bash
-pip3 install PyPDF2 sentence-transformers chromadb langchain langchain-groq
+pip3 install PyPDF2 sentence-transformers chromadb langchain langchain-groq python-dotenv streamlit
 ```
 
 ### Step 3 — Get a free Groq API key
@@ -68,29 +69,33 @@ pip3 install PyPDF2 sentence-transformers chromadb langchain langchain-groq
 3. Create an API key
 
 ### Step 4 — Set your API key
-```bash
-export GROQ_API_KEY="your-api-key-here"
+
+Create a `.env` file in the root folder:
+```
+GROQ_API_KEY=your-api-key-here
 ```
 
-### Step 5 — Add your PDF
-Place your PDF file inside the `data/` folder and update this line in `app.py`:
+## Running the App
+
+### Option 1 — Web UI (Streamlit) — Recommended
+```bash
+streamlit run streamlit.py
+```
+Then open your browser, upload any PDF, type your question and click **Ask**.
+
+### Option 2 — Command Line
+Place your PDF inside the `data/` folder and update this line in `app.py`:
 ```python
 result = validate_files(["data/your-file.pdf"])
 ```
-
-### Step 6 — Run
+Then run:
 ```bash
 python3 app.py
 ```
 
-### Step 7 — Ask anything
-```
-Ask a question about your PDF: your question here
-```
-
 ## Features
 
-- Accepts any text-based PDF
+- Upload any PDF directly from your browser
 - Reads all pages automatically
 - Interactive question input — no hardcoding needed
 - Semantic search — finds answers by meaning, not just keywords
@@ -103,8 +108,10 @@ Ask a question about your PDF: your question here
 ```
 rag-assistant/
 │
-├── data/            # Place your PDF files here
-├── app.py           # Main application
+├── data/            # Place your PDF files here (CLI mode)
+├── app.py           # Core RAG logic
+├── streamlit.py     # Web UI
+├── .env             # Your Groq API key (not committed to git)
 └── README.md        # Documentation
 ```
 
