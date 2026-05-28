@@ -40,9 +40,6 @@ def embed_chunks(chunks):
 
 def store_vectors(chunks, vectors):
     client = chromadb.Client()
-    
-    # Optional but recommended: Delete the old collection first 
-    # so answers from an old PDF don't mix with a newly uploaded PDF!
     try:
         client.delete_collection("pdf_chunks")
     except Exception:
@@ -52,7 +49,6 @@ def store_vectors(chunks, vectors):
     
     ids = []
     for i in range(len(chunks)):
-        # Generate a guaranteed unique random ID for every chunk
         ids.append(str(uuid.uuid4()))
         
     collection.add(

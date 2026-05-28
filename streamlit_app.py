@@ -1,7 +1,7 @@
 import streamlit as st
 from app import validate_files, read_pdf, split_text, embed_chunks, store_vectors, search, get_answer
 
-st.title("Ask My PDF powered by RAG Assistant")
+st.title("Ask My PDF powered by RAG")
 st.write("Upload a PDF and ask questions about it")
 
 uploaded_file = st.file_uploader("Upload your PDF", type="pdf")
