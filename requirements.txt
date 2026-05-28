@@ -1,6 +1,6 @@
 PyPDF2
 sentence-transformers
-chromdb
+chromadb
 langchain
 langchain-groq
 python-dotenv
